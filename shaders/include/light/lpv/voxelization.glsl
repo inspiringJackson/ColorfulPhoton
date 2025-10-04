@@ -6,12 +6,11 @@ vec3 Scene_pos;
 
 vec3 scene_to_voxel_space(vec3 scene_pos) {
 	Scene_pos = scene_pos;
-	return scene_pos + fract(cameraPosition) + 0.5 * vec3(voxel_volume_size);
-	//return scene_pos + fract(cameraPosition) + (0.5 * vec3(voxel_volume_size * 4.0)) - 800.0;
+	return (scene_pos + fract(cameraPosition)) + 0.5 * vec3(voxel_volume_size);
 }
 
 vec3 voxel_to_scene_space(vec3 voxel_pos) {
-	return voxel_pos - fract(cameraPosition) - (0.5 * vec3(voxel_volume_size));
+	return (voxel_pos - 0.5 * vec3(voxel_volume_size)) - fract(cameraPosition);
 }
 
 bool is_inside_voxel_volume(vec3 voxel_pos) {
@@ -53,15 +52,12 @@ void update_voxel_map(uint block_id, vec3 pos) {
 	vec3 scene_pos = transform(shadowModelViewInverse, view_pos);
 	vec3 voxel_pos = scene_to_voxel_space(scene_pos);
 
+	
+
 	// Work out whether this vertex is in the lower corner of the block grid
 	vec3 block_pos = transform(gl_ModelViewMatrix, gl_Vertex.xyz);
 	     block_pos = transform(shadowModelViewInverse, block_pos);
 		 block_pos = fract(block_pos + cameraPosition);
-	//vec3 Model_pos = gl_Vertex.xyz;
-	//vec4 View_pos = gl_ModelViewMatrix * vec4(Model_pos, 1.0);
-	//vec4 clip_pos = gl_ProjectionMatrix * View_pos;
-	//Pos = clip_pos;
-	//Pos = gl_ProjectionMatrix * Pos;
 	bool vertex_at_grid_corner = is_corner(block_pos, rcp(16.0) - 1e-3);
 
 	bool is_voxelized = is_voxelized(block_id, vertex_at_grid_corner);

@@ -37,11 +37,11 @@ uniform usampler3D voxel_sampler;
 uniform sampler2D light_data_sampler;
 
 uniform vec3 cameraPosition;
+uniform ivec3 cameraPositionInt;
 uniform vec3 previousCameraPosition;
 
 uniform int frameCounter;
 uniform float sunAngle;
-
 
 
 #include "/include/light/lpv/floodfill.glsl"
